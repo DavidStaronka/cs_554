@@ -1,0 +1,16 @@
+{
+   "name": "cs-546-lab-9",
+   "version": "1.0.0",
+   "description": "My lab 9 module",
+   "main": "app.js",
+   "scripts": {
+      "start": "node app.js"
+   },
+   "author": "David Staronka 10440468",
+   "license": "ISC",
+   "dependencies": {
+      "express": "^4.17.1",
+      "express-handlebars": "^5.3.4",
+      "handlebars": "^4.7.7"
+   }
+}
