@@ -45,17 +45,18 @@ async function create(title, body, poster) {
         comments: []
     };
 
-    const info = await userCollection.insertOne(newBlog);
+    const info = await blogCollection.insertOne(newBlog);
 
     return ObjectIdToString(newBlog);
 }
 
 async function get_blogs(numBlogs, skip) {
-    if(!numBlogs || typeof numBlogs !== 'number' || numBlogs < 0)
-        throw new Error("numBlogs must be a non-negative number");
+    if(typeof numBlogs !== 'number' || numBlogs < 0 || numBlogs > 100)
+        throw new Error("numBlogs must be a non-negative number less than or equal to 100");
 
-    if(!skip || typeof skip !== 'number' || skip < 0)
+    if(typeof skip !== 'number' || skip < 0){
         throw new Error("skip must be a non-negative number");
+    }
 
     const blogCollection = await blogs();
 
@@ -85,25 +86,30 @@ async function update_blog(id, title, body, curUser) {
 
     
     const blogCollection = await blogs();
-    const blog = await blogCollection.findOne({ _id: ObjectId(id) });
+    let blog = await blogCollection.findOne({ _id: ObjectId(id) });
     if(blog.userThatPosted._id.toString() != curUser._id.toString())
         throw new Error("You are not the owner of this blog");
     
+    let updatedBlog = {};
+    
     
     if(title && body)
-        const updatedBlog = await blogCollection.updateOne({ _id: ObjectId(id) }, { $set: { title: title, body: body } });
+        updatedBlog = await blogCollection.updateOne({ _id: ObjectId(id) }, { $set: { title: title, body: body } });
     else if(title)
-        const updatedBlog = await blogCollection.updateOne({ _id: ObjectId(id) }, { $set: { title: title } });
+        updatedBlog = await blogCollection.updateOne({ _id: ObjectId(id) }, { $set: { title: title } });
     else if(body)
-        const updatedBlog = await blogCollection.updateOne({ _id: ObjectId(id) }, { $set: { body: body } });
+        updatedBlog = await blogCollection.updateOne({ _id: ObjectId(id) }, { $set: { body: body } });
     else    
         throw new Error("No fields to update");
 
     if(!updatedBlog)
         throw new Error("Blog not found");
 
-    return ObjectIdToString(updatedBlog);
+    
+    blog = await blogCollection.findOne({ _id: ObjectId(id) });
+
+    return ObjectIdToString(blog);
 }
 
 
-module.exports = {create, get_blogs, get_blog}
+module.exports = {create, get_blogs, get_blog, update_blog};

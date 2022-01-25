@@ -2,6 +2,17 @@ const mongoCollections = require('../config/mongoCollections');
 const blogs = mongoCollections.blogs;
 let { ObjectId } = require('mongodb');
 
+function type_checker(item, type, errString, objType){
+    if(item == undefined || typeof(item) != type || item.length == 0) throw errString;
+    if(type == "string"){
+        //got this if statement from stack overflow here: https://stackoverflow.com/questions/2031085/how-can-i-check-if-string-contains-characters-whitespace-not-just-whitespace
+        if (!/\S/.test(item)) throw errString;
+    }
+    if(objType == "array"){
+        if(!Array.isArray(item) || item.length == 0) throw errString;
+    }
+}
+
 function stringCheck(str) {
     return typeof str === 'string' && str.length > 0 && str.replace(/\s/g, "").length > 0;
 }
@@ -29,7 +40,7 @@ async function create(id, user, comment) {
 
     const newComment = {
         _id: new ObjectId(),
-        userThatPostedComment: user,
+        userThatPostedComment: {username: user.username, _id: user._id},
         comment: comment
     };
 
@@ -45,16 +56,24 @@ async function delete_comment(blogId, commentId, user) {
 
     const blogCollection = await blogs();
 
-    const curComment = await blogCollection.findOne({_id: new ObjectId(blogId)}, {comments: {$elemMatch: {_id: new ObjectId(commentId)}}});
-    if(curComment._id.toString() !== user._id.toString())
-        throw new Error('User is not the poster of this comment.');
+    const curComment = await blogCollection.findOne({'comments._id': new ObjectId(commentId)});
+    for(comment of curComment.comments){
+        if(comment._id.toString() == commentId){
+            if(comment.userThatPostedComment._id.toString() !== user._id)
+                throw new Error('User is not the poster of this comment.');
+            
+            const info = await blogCollection.updateOne({_id: new ObjectId(blogId)}, {$pull: {comments: {_id: new ObjectId(commentId)}}});
 
-    const info = await blogCollection.updateOne({_id: new ObjectId(blogId)}, {$pull: {comments: {_id: new ObjectId(commentId)}}});
+            if(info.modifiedCount === 0)
+                throw new Error('Could not delete comment');
 
-    if(info.modifiedCount === 0)
-        throw new Error('Could not delete comment');
+            return {response: "Successfully deleted comment"};
+        }
+    }
 
-    return {response: "Successfully deleted comment"};
+    
+
+    
 }
 
 module.exports = {

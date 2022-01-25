@@ -34,11 +34,15 @@ function stringCheck(str) {
 }
 
 async function create(name, username, password) {
+    console.log(name, username, password);
     type_checker(name, "string", "Name must be a non-empty string");
     type_checker(username, "string", "Username must be a non-empty string");
     type_checker(password, "string", "Password must be a non-empty string");
 
     const userCollection = await users();
+
+    const oldUser = await userCollection.findOne({ username: username.toLowerCase() });
+    if (oldUser) throw new Error('Username already exists.');
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -50,10 +54,24 @@ async function create(name, username, password) {
 
     const info = await userCollection.insertOne(user);
 
-    return ObjectIdToString(user);
+    return {_id: user._id.toString(), name: user.name, username: user.username};
 }
 
+async function login_validation(username, password) {
+    type_checker(username, "string", "Username must be a non-empty string");
+    type_checker(password, "string", "Password must be a non-empty string");
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({ username: username.toLowerCase() });
+    if (!user) throw new Error('Either username or password is incorrect.');
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) throw new Error('Either username or password is incorrect.');
+
+    return {_id: user._id.toString(), username: user.username};
+}
 
 module.exports = {
-    create
+    create,
+    login_validation
 }

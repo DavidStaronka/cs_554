@@ -2,11 +2,12 @@ const express = require('express');
 const session = require('express-session')
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const configRoutes = require('./routes');
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
 
 app.use(
     session({
@@ -23,31 +24,49 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.post('/blog/:id/comments', (req, res, next) => {
+    // console.log(req.url);
+    if (!req.session.user) {
+        return res.status(401).json({error: 'User must be logged in to create a comment'});
+    } else {
+        return next();
+    }
+});
+
 app.post('/blog', (req, res, next) => {
     // console.log(req.url);
     if (!req.session.user) {
-        return res.json({error: 'User must be logged in to create a blog post'});
+        return res.status(401).json({error: 'User must be logged in to create a blog post'});
     } else {
         return next();
     } 
 });
 
-app.use('/rating', (req, res, next) => {
+app.put('/blog/:id', (req, res, next) => {
     // console.log(req.url);
     if (!req.session.user) {
-        return res.redirect('/login');
+        return res.status(401).json({error: 'User must be logged in to update a blog post'});
     } else {
         return next();
     } 
 });
 
-// Create screen middleware only letting admin users create games
-app.use('/videogames/create', (req, res, next) => {
-    if (!req.session.user || !req.session.user.isAdmin) {
-        return res.redirect('/');
+app.patch('/blog/:id', (req, res, next) => {
+    // console.log(req.url);
+    if (!req.session.user) {
+        return res.status(401).json({error: 'User must be logged in to update a blog post'});
     } else {
         return next();
     } 
+});
+
+app.delete('/blog/:blogId/:commentId', (req, res, next) => {
+    // console.log(req.url);
+    if (!req.session.user) {
+        return res.status(401).json({error: 'User must be logged in to delete a comment'});
+    } else {
+        return next();
+    }
 });
 
 configRoutes(app);
