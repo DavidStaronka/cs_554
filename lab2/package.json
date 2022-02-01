@@ -1,0 +1,19 @@
+{
+   "name": "cs-554-lab-2",
+   "version": "1.0.0",
+   "description": "My lab 2 module",
+   "main": "app.js",
+   "scripts": {
+      "start": "node app.js"
+   },
+   "author": "David Staronka 10440468",
+   "license": "ISC",
+   "dependencies": {
+      "bluebird": "^3.4.7",
+      "express": "^4.17.2",
+      "flat": "^5.0.2",
+      "node-redis": "^0.1.7",
+      "redis": "^3.0.2",
+      "redis-server": "^1.2.2"
+   }
+}
