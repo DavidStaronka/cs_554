@@ -1,7 +1,7 @@
 const projectRoutes = require('./arr');
-const datatRoutes = require('./data');
+const dataRoutes = require('./get');
 
 module.exports = {
     projects: projectRoutes,
-    data: datatRoutes
+    get: dataRoutes
 }
