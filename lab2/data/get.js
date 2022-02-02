@@ -11,7 +11,7 @@ function type_checker(item, type, errString, objType){
     }
 }
 
-function getById(id){
+async function getById(id){
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             type_checker(id, 'number', 'id must be a number');

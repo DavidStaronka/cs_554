@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
-const blogs = data.data;
+const get = data.get;
 const bluebird = require('bluebird');
 const redis = require('redis');
 const client = redis.createClient();
@@ -59,7 +59,7 @@ router.use('/:id', async (req, res, next) => {
 
 router.use('/:id', async (req, res) => {
     try{
-        let person = await data.getById(req.params.id);
+        let person = await get.getById(req.params.id);
         if(!person) throw new Error('No person found with that id');
         recentVisits.unshift(person);
         await client.setAsync(req.params.id, JSON.stringify(person));
