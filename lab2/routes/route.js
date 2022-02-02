@@ -45,7 +45,7 @@ router.use('/:id', async (req, res, next) => {
         if(!req.params.id) throw new Error('id must not be empty');
         let cachedUser = await client.getAsync(req.params.id);
         if (cachedUser) {
-            recentVisits.unshift(cachedUser);
+            recentVisits.unshift(JSON.parse(cachedUser));
             res.send(JSON.parse(cachedUser));
             return;
         } else {
