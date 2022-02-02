@@ -59,14 +59,13 @@ router.use('/:id', async (req, res, next) => {
 
 router.use('/:id', async (req, res) => {
     try{
-        let person = await get.getById(req.params.id);
+        let person = await get.getById(parseInt(req.params.id));
         if(!person) throw new Error('No person found with that id');
         recentVisits.unshift(person);
         await client.setAsync(req.params.id, JSON.stringify(person));
         res.send(person);
         return;
-    }
-    catch(e){
+    } catch(e){
         res.status(400).json({error: e.toString()});
         return;
     }
