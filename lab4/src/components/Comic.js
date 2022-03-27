@@ -130,8 +130,8 @@ const Comic = (props) => {
 								{charData && charData.characters.items && charData.characters.items.length >= 1 ? (
 									<span>
 										{charData.characters.items.map((comic) => {
-											if (charData.characters.items.length > 1) return <Link to={'/characters/' + /[^/]*$/.exec(comic.resourceURI)[0]} key = {comic.name}> {comic.name},</Link>;
-											return <Link to={'/characters/' + /[^/]*$/.exec(comic.resourceURI)[0]} key = {comic.name}>{comic.name}</Link>;
+											if (charData.characters.items.length > 1) return <Link to={'/characters/' + /[^/]*$/.exec(comic.resourceURI)[0]} key = {comic.resourceURI}> {comic.name},</Link>;
+											return <Link to={'/characters/' + /[^/]*$/.exec(comic.resourceURI)[0]} key = {comic.resourceURI}>{comic.name}</Link>;
 										})}
 									</span>
 								) : (
@@ -140,7 +140,7 @@ const Comic = (props) => {
 							</p>
                             <p>
                                 <dt className='title'>Series: </dt>
-                                <Link to={'/series/' + /[^/]*$/.exec(charData.series.resourceURI)[0]} key = {charData.series.name}> {charData.series.name}</Link>
+                                <Link to={'/series/' + /[^/]*$/.exec(charData.series.resourceURI)[0]} key = {charData.series.resourceURI}> {charData.series.name}</Link>
 							</p>
 						</dl>
 						<Link to='/comics/page/0'>Back to all comics...</Link>

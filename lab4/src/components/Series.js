@@ -132,7 +132,7 @@ const Series = (props) => {
 								{charData && charData.characters.items && charData.characters.items.length >= 1 ? (
 									<span>
 										{charData.characters.items.map((series) => {
-											if (charData.characters.items.length > 1) return <Link to={'/characters/' + /[^/]*$/.exec(series.resourceURI)[0]} key = {series.resourceURI}> {series.resourceURI},</Link>;
+											if (charData.characters.items.length > 1) return <Link to={'/characters/' + /[^/]*$/.exec(series.resourceURI)[0]} key = {series.resourceURI}> {series.name},</Link>;
 											return <Link to={'/characters/' + /[^/]*$/.exec(series.resourceURI)[0]} key = {series.resourceURI}>{series.resourceURI}</Link>;
 										})}
 									</span>
@@ -145,7 +145,7 @@ const Series = (props) => {
                                 {charData && charData.comics.items && charData.comics.items.length >= 1 ? (
 									<span>
 										{charData.comics.items.map((series) => {
-											if (charData.comics.items.length > 1) return <Link to={'/comics/' + /[^/]*$/.exec(series.resourceURI)[0]} key = {series.resourceURI}> {series.resourceURI},</Link>;
+											if (charData.comics.items.length > 1) return <Link to={'/comics/' + /[^/]*$/.exec(series.resourceURI)[0]} key = {series.resourceURI}> {series.name},</Link>;
 											return <Link to={'/comics/' + /[^/]*$/.exec(series.resourceURI)[0]} key = {series.resourceURI}>{series.resourceURI}</Link>;
 										})}
 									</span>
