@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SearchShows = (props) => {
+const Search = (props) => {
 	const handleChange = (e) => {
 		props.searchValue(e.target.value);
 	};
@@ -14,11 +14,11 @@ const SearchShows = (props) => {
 			className='center'
 		>
 			<label>
-				<span>Search Shows: </span>
+				<span>Search: </span>
 				<input autoComplete='off' type='text' name='searchTerm' onChange={handleChange} />
 			</label>
 		</form>
 	);
 };
 
-export default SearchShows;
+export default Search;

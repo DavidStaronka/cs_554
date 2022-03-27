@@ -5,19 +5,23 @@ const Home = () => {
 	return (
 		<div>
 			<p>
-				This is a simple example of using React to Query the TV Maze API. Start by clicking the "Shows" button above
+				This is a simple example of using React to Query the Marvel API. To get started, click one of the buttons above.
 			</p>
 
 			<p className='hometext'>
-				The application queries two of TV Maze's end-points:{' '}
-				<a rel='noopener noreferrer' target='_blank' href='http://api.tvmaze.com/shows'>
-					http://api.tvmaze.com/shows
+				The application queries the following Marvel API end-points:{' '}
+				<a rel='noopener noreferrer' target='_blank' href='http://gateway.marvel.com:443/v1/public/characters'>
+                    http://gateway.marvel.com:443/v1/public/characters
+				</a>
+				,{' '}
+				<a rel='noopener noreferrer' target='_blank' href='http://gateway.marvel.com:443/v1/public/comics'>
+                    http://gateway.marvel.com:443/v1/public/comics
+				</a>
+                , and{' '}
+				<a rel='noopener noreferrer' target='_blank' href='http://gateway.marvel.com:443/v1/public/series'>
+                    http://gateway.marvel.com:443/v1/public/series
 				</a>{' '}
-				and{' '}
-				<a rel='noopener noreferrer' target='_blank' href='http://api.tvmaze.com/search/shows?q=SEARCH_TERM'>
-					http://api.tvmaze.com/search/shows?q=SEARCH_TERM
-				</a>{' '}
-				for searching the shows in the API (Where SEARCH_TERM is what the user types into the search input)
+				To find characters, comics, and series respectively. You can use the search bar on each page to search for a specific character, comic, or series depending on which page you're on.
 			</p>
 		</div>
 	);

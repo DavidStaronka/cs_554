@@ -1,9 +1,12 @@
 import React from 'react';
-import logo from './img/tvm-header-logo.png';
 import './App.css';
-import ShowList from './components/ShowList';
-import Show from './components/Show';
+import CharList from './components/CharList';
+import Char from './components/Char';
 import Home from './components/Home';
+import ComicList from './components/ComicList';
+import Comic from './components/Comic';
+import SeriesList from './components/SeriesList';
+import Series from './components/Series';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 const App = () => {
@@ -11,22 +14,31 @@ const App = () => {
 		<Router>
 			<div className='App'>
 				<header className='App-header'>
-					<img src={logo} className='App-logo' alt='logo' />
-					<h1 className='App-title'>Welcome to the React.js TV Maze API Example</h1>
+					<h1 className='App-title'>Welcome to the React.js Marvel API app</h1>
 					<Link className='showlink' to='/'>
 						Home
 					</Link>
-					<Link className='showlink' to='/shows'>
-						Shows
+					<Link className='showlink' to='/characters/page/0'>
+						Characters
+					</Link>
+                    <Link className='showlink' to='/comics/page/0'>
+						Comics
+					</Link>
+                    <Link className='showlink' to='/Series/page/0'>
+						Series
 					</Link>
 				</header>
 				<br />
 				<br />
 				<div className='App-body'>
 					<Route exact path='/' component={Home} />
-					<Route exact path='/shows' component={ShowList} />
-					<Route exact path='/shows/:id' component={Show} />
-                    <Route exact path='/shows/page/:page' component={ShowList} />
+					<Route exact path='/characters/page/:page' component={CharList} />
+					<Route exact path='/characters/:id' component={Char} />
+                    <Route exact path='/comics/page/:page' component={ComicList} />
+                    <Route exact path='/comics/:id' component={Comic} />
+                    <Route exact path='/series/page/:page' component={SeriesList} />
+                    <Route exact path='/series/:id' component={Series} />
+
 				</div>
 			</div>
 		</Router>
