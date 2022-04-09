@@ -52,10 +52,10 @@ const resolvers = {
             const images = res.data.map(image => {
                 console.log(image);
                 return {
-                    id: image.data.id,
-                    url: image.data.urls.regular,
-                    posterName: image.data.user.name,
-                    description: image.data.description,
+                    id: image.id,
+                    url: image.urls.regular,
+                    posterName: image.user.name,
+                    description: image.description,
                     userPosted: false,
                     binned: false
                 }
