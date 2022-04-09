@@ -50,7 +50,7 @@ const resolvers = {
         unsplashImages: async (_, args) => {
             let res = await Axios.get(`https://api.unsplash.com/photos?page=${args.pageNum}&client_id=${UNSPLASH_ACCESS_KEY}`);
             const images = res.data.map(image => {
-                console.log(image);
+                // console.log(image);
                 return {
                     id: image.id,
                     url: image.urls.regular,
@@ -63,7 +63,7 @@ const resolvers = {
             return images;
         },
         binnedImages: async () => {
-            //TODO: test this thouroughly, probably completely broken
+            //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
             const keys = await scan.scan('*');
             let binnedImages = [];
@@ -74,7 +74,7 @@ const resolvers = {
             return binnedImages;
         },
         userPostedImages: async () => {
-            //same concept as before, but only take images where userPosted is true
+            //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
             const keys = await scan.scan('*');
             let userPostedImages = [];
