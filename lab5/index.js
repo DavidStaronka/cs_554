@@ -50,6 +50,7 @@ const resolvers = {
         unsplashImages: async (_, args) => {
             let res = await Axios.get(`https://api.unsplash.com/photos?page=${args.pageNum}&client_id=${UNSPLASH_ACCESS_KEY}`);
             const images = res.data.map(image => {
+                console.log(image);
                 return {
                     id: image.data.id,
                     url: image.data.urls.regular,
