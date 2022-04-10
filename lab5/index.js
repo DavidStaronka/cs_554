@@ -18,7 +18,7 @@ function scan(match) {
 
 	// Recursive call to Redis SCAN. Recursion continues until cursor = '0'
 	function innerscan() {
-		return redisClient.scanAsync(cursor, 'MATCH', match ? match : '*', 'COUNT', '10')
+		return client.scanAsync(cursor, 'MATCH', match ? match : '*', 'COUNT', '10')
 			.then(res => {
 				cursor = res[0];
 
