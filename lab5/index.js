@@ -66,16 +66,18 @@ const resolvers = {
         binnedImages: async () => {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
-            let binnedImages = await scan.scan('*', async function (err, matchingKeys) {
-                if (err) throw(err);
-                let binnedImages = [];
-                for(let key of matchingKeys) {
-                    let image = await client.getAsync(key);
-                    binnedImages.push(JSON.parse(image));
-                }
-                console.log(binnedImages);
-                return new promise(binnedImages);
-            });
+            let binnedImages = await new promise((resolve, reject) => 
+                scan.scan('*', async function (err, matchingKeys) {
+                    if (err) reject();
+                    let binnedImages = [];
+                    for(let key of matchingKeys) {
+                        let image = await client.getAsync(key);
+                        binnedImages.push(JSON.parse(image));
+                    }
+                    console.log(binnedImages);
+                    resolve(binnedImages);
+                })
+            );
             return binnedImages;
         },
         userPostedImages: async () => {
