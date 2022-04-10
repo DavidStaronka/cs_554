@@ -70,6 +70,7 @@ const resolvers = {
                 new promise((resolve, reject) => 
                     scan.scan('*', async function (err, matchingKeys) {
                         if (err) reject(err);
+                        console.log(matchingKeys);
                         let binnedImages = [];
                         for(let key of matchingKeys) {
                             let image = await client.getAsync(key);
