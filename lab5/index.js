@@ -80,9 +80,14 @@ const resolvers = {
                     })
                 );
             };
-            let binnedImages = await testPromise();
-            console.log(binnedImages);
-            return binnedImages;
+            testPromise().then(
+                (binnedImages) => {
+                    console.log(binnedImages);
+                    return binnedImages;
+                }
+            );
+            // console.log(binnedImages);
+            // return binnedImages;
         },
         userPostedImages: async () => {
             //TODO: rewrite scan to use callback
