@@ -12,6 +12,8 @@ bluebird.promisifyAll(redis.Multi.prototype);
 const UNSPLASH_ACCESS_KEY = '4zY8nDw5WnbdLz495wOq5YtyOveRbDoeW0nRNwuCvaw';
 const UNSPLASH_SECRET_KEY = "8egXgitCvxgefSYAco_5N7y2MCDAiIv_swetTcwraFY";
 
+// function stolen almost wholesale from: https://gist.github.com/Jaaromy/1bbe6b3d0416fb6ce13b7ac240141ddd
+// Taken in desperation about 3 hours into bugfixing
 function scan(match) {
 	let cursor = '0';
 	let keys = [];
@@ -99,20 +101,13 @@ const resolvers = {
         },
         userPostedImages: async () => {
             //TODO: rewrite scan to use callback
-            const scan = new redisScan(client);
-            let userPostedImages = await scan.scan('*', async function(err, matchingKeys) {
-                if (err) throw(err);
-                let userPostedImages = [];
-                for(let key of matchingKeys) {
-                    let image = await client.getAsync(key);
-                    let parsedImage = JSON.parse(image);
-                    if(parsedImage.userPosted) {
-                        userPostedImages.push(parsedImage);
-                    }
-                }
-                return new promise(userPostedImages);
-            });
-            
+            let userPostedKeys = await scan('*')
+            let userPostedImages = [];
+            for(let key of userPostedKeys) {
+                let image = await client.getAsync(key);
+                let parsedImage = JSON.parse(image);
+                userPostedImages.push(parsedImage);
+            }
             return userPostedImages;
         }
     },
