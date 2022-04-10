@@ -69,7 +69,7 @@ const resolvers = {
             let testPromise = () => {
                 new promise((resolve, reject) => 
                     scan.scan('*', async function (err, matchingKeys) {
-                        if (err) reject();
+                        if (err) reject(err);
                         let binnedImages = [];
                         for(let key of matchingKeys) {
                             let image = await client.getAsync(key);
@@ -80,14 +80,9 @@ const resolvers = {
                     })
                 );
             };
-            testPromise().then(
-                (binnedImages) => {
-                    console.log(binnedImages);
-                    return binnedImages;
-                }
-            );
-            // console.log(binnedImages);
-            // return binnedImages;
+            let binnedImages = await testPromise()
+            console.log(binnedImages);
+            return binnedImages;
         },
         userPostedImages: async () => {
             //TODO: rewrite scan to use callback
