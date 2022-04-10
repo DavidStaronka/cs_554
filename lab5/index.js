@@ -9,6 +9,7 @@ const client = redis.createClient();
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
+const util = require('util')
 const UNSPLASH_ACCESS_KEY = '4zY8nDw5WnbdLz495wOq5YtyOveRbDoeW0nRNwuCvaw';
 const UNSPLASH_SECRET_KEY = "8egXgitCvxgefSYAco_5N7y2MCDAiIv_swetTcwraFY";
 
@@ -66,32 +67,31 @@ const resolvers = {
         binnedImages: async () => {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
+            const scanPromise = util.promisify(scan.scan);
+            let keys = await scanPromise('*');
+
             let binnedImages = [];
-            await scan.scan('*', async function (err, matchingKeys) {
-                if (err) throw(err);
-                for(let key of matchingKeys) {
-                    let image = await client.getAsync(key);
-                    binnedImages.push(JSON.parse(image));
-                }
-                return new promise();
-            });
+            for(let key of keys) {
+                let image = await client.getAsync(key);
+                binnedImages.push(JSON.parse(image));
+            }
+            
             return binnedImages;
         },
         userPostedImages: async () => {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
+            const scanPromise = util.promisify(scan.scan);
+            let keys = await scanPromise('*');
+            
             let userPostedImages = [];
-            await scan.scan('*', async function(err, matchingKeys) {
-                if (err) throw(err);
-                for(let key of matchingKeys) {
-                    let image = await client.getAsync(key);
-                    let parsedImage = JSON.parse(image);
-                    if(parsedImage.userPosted) {
-                        userPostedImages.push(parsedImage);
-                    }
+            for(let key of keys) {
+                let image = await client.getAsync(key);
+                let parsedImage = JSON.parse(image);
+                if(parsedImage.userPosted) {
+                    userPostedImages.push(parsedImage);
                 }
-                return new promise();
-            });
+            }
             
             return userPostedImages;
         }
