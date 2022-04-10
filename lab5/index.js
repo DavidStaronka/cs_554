@@ -4,6 +4,7 @@ const redisScan = require('node-redis-scan');
 const uuid = require('uuid');
 const bluebird = require('bluebird');
 const redis = require('redis');
+const promise = require('bluebird/js/release/promise');
 const client = redis.createClient();
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
@@ -66,12 +67,13 @@ const resolvers = {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
             let binnedImages = [];
-            scan.scan('*', async function (err, matchingKeys) {
+            await scan.scan('*', async function (err, matchingKeys) {
                 if (err) throw(err);
                 for(let key of matchingKeys) {
                     let image = await client.getAsync(key);
                     binnedImages.push(JSON.parse(image));
                 }
+                return new promise();
             });
             return binnedImages;
         },
@@ -79,7 +81,7 @@ const resolvers = {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
             let userPostedImages = [];
-            scan.scan('*', async function(err, matchingKeys) {
+            await scan.scan('*', async function(err, matchingKeys) {
                 if (err) throw(err);
                 for(let key of matchingKeys) {
                     let image = await client.getAsync(key);
@@ -88,6 +90,7 @@ const resolvers = {
                         userPostedImages.push(parsedImage);
                     }
                 }
+                return new promise();
             });
             
             return userPostedImages;
