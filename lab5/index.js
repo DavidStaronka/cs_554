@@ -13,10 +13,6 @@ const UNSPLASH_ACCESS_KEY = '4zY8nDw5WnbdLz495wOq5YtyOveRbDoeW0nRNwuCvaw';
 const UNSPLASH_SECRET_KEY = "8egXgitCvxgefSYAco_5N7y2MCDAiIv_swetTcwraFY";
 
 function scan(match) {
-	if (cacheFail) {
-		return bluebird.try(() => null);
-	}
-
 	let cursor = '0';
 	let keys = [];
 
