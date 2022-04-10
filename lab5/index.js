@@ -78,6 +78,7 @@ const resolvers = {
                     resolve(binnedImages);
                 })
             );
+            console.log(binnedImages);
             return binnedImages;
         },
         userPostedImages: async () => {
