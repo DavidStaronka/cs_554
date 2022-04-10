@@ -67,7 +67,7 @@ const resolvers = {
         binnedImages: async () => {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
-            const scanPromise = util.promisify(scan.scan);
+            const scanPromise = util.promisify(scan.eachScan);
             let keys = await scanPromise('*');
 
             let binnedImages = [];
@@ -75,13 +75,13 @@ const resolvers = {
                 let image = await client.getAsync(key);
                 binnedImages.push(JSON.parse(image));
             }
-            
+
             return binnedImages;
         },
         userPostedImages: async () => {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
-            const scanPromise = util.promisify(scan.scan);
+            const scanPromise = util.promisify(scan.eachScan);
             let keys = await scanPromise('*');
             
             let userPostedImages = [];
