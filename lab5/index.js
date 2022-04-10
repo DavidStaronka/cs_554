@@ -65,26 +65,31 @@ const resolvers = {
         binnedImages: async () => {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
-            const keys = await scan.scan('*');
             let binnedImages = [];
-            for(let key of keys) {
-                let image = await client.getAsync(key);
-                binnedImages.push(JSON.parse(image));
-            }
+            scan.scan('*', (err, matchingKeys) => {
+                if (err) throw(err);
+                for(let key of matchingKeys) {
+                    let image = await client.getAsync(key);
+                    binnedImages.push(JSON.parse(image));
+                }
+            });
             return binnedImages;
         },
         userPostedImages: async () => {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
-            const keys = await scan.scan('*');
             let userPostedImages = [];
-            for(let key of keys) {
-                let image = await client.getAsync(key);
-                let parsedImage = JSON.parse(image);
-                if(parsedImage.userPosted) {
-                    userPostedImages.push(parsedImage);
+            scan.scan('*', (err, matchingKeys) => {
+                if (err) throw(err);
+                for(let key of matchingKeys) {
+                    let image = await client.getAsync(key);
+                    let parsedImage = JSON.parse(image);
+                    if(parsedImage.userPosted) {
+                        userPostedImages.push(parsedImage);
+                    }
                 }
-            }
+            });
+            
             return userPostedImages;
         }
     },
@@ -124,7 +129,6 @@ const resolvers = {
                 }
             } else {
                 if(args.binned){
-                    //pull image data from react state
                     await client.setAsync(args.id, JSON.stringify(image));
                     return image;
                 }
