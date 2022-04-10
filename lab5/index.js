@@ -129,12 +129,12 @@ const resolvers = {
             let testImg = await client.getAsync(args.id);
             testImg = JSON.parse(testImg);
             const image = {
-                id: args.id,
-                url: args.url,
-                posterName: args.posterName,
-                description: args.description,
-                userPosted: args.userPosted,
-                binned: args.binned
+                id: args.id ? args.id : testImg.id,
+                url: args.url ? args.url : testImg.url,
+                posterName: args.posterName ? args.posterName : testImg.posterName,
+                description: args.description ? args.description : testImg.description,
+                userPosted: args.userPosted ? args.userPosted : testImg.userPosted,
+                binned: args.binned ? args.binned : testImg.binned
             };
             if(testImg) {
                 if(testImg.binned && !args.binned && !args.userPosted) {
@@ -142,6 +142,9 @@ const resolvers = {
                     await client.delAsync(args.id);
                     return testImg;
                 } else if(args.binned && !testImg.binned) {
+                    await client.setAsync(args.id, JSON.stringify(image));
+                    return image;
+                } else if(args.userPosted || testImg.userPosted) {
                     await client.setAsync(args.id, JSON.stringify(image));
                     return image;
                 }
