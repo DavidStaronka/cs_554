@@ -12,6 +12,33 @@ bluebird.promisifyAll(redis.Multi.prototype);
 const UNSPLASH_ACCESS_KEY = '4zY8nDw5WnbdLz495wOq5YtyOveRbDoeW0nRNwuCvaw';
 const UNSPLASH_SECRET_KEY = "8egXgitCvxgefSYAco_5N7y2MCDAiIv_swetTcwraFY";
 
+function scan(match) {
+	if (cacheFail) {
+		return bluebird.try(() => null);
+	}
+
+	let cursor = '0';
+	let keys = [];
+
+	// Recursive call to Redis SCAN. Recursion continues until cursor = '0'
+	function innerscan() {
+		return redisClient.scanAsync(cursor, 'MATCH', match ? match : '*', 'COUNT', '10')
+			.then(res => {
+				cursor = res[0];
+
+				keys.push(...res[1]);
+
+				if (cursor === '0') {
+					return keys;
+				}
+
+				return innerscan();
+			});
+	}
+
+	return bluebird.try(innerscan);
+}
+
 const typeDefs = gql`
     type Query {
         unsplashImages(pageNum: Int): [ImagePost]
@@ -65,17 +92,13 @@ const resolvers = {
         },
         binnedImages: async () => {
             //TODO: rewrite scan to use callback
-            const scan = new redisScan(client);
-            let binnedImages = await scan.scan('*', async function (err, matchingKeys) {
-                if (err) throw(err);
-                let binnedImages = [];
-                for(let key of matchingKeys) {
-                    let image = await client.getAsync(key);
-                    binnedImages.push(JSON.parse(image));
-                }
-                console.log(binnedImages);
-                return new promise(binnedImages);
-            });
+            let binnedKeys = await scan('*')
+            let binnedImages = [];
+            for(let key of binnedKeys) {
+                let image = await client.getAsync(key);
+                let parsedImage = JSON.parse(image);
+                binnedImages.push(parsedImage);
+            }
             return binnedImages;
         },
         userPostedImages: async () => {
