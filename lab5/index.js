@@ -73,6 +73,7 @@ const resolvers = {
                     let image = await client.getAsync(key);
                     binnedImages.push(JSON.parse(image));
                 }
+                console.log(binnedImages);
                 return new promise(binnedImages);
             });
             return binnedImages;
