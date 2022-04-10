@@ -66,7 +66,7 @@ const resolvers = {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
             let binnedImages = [];
-            scan.scan('*', (err, matchingKeys) => {
+            scan.scan('*', async function (err, matchingKeys) {
                 if (err) throw(err);
                 for(let key of matchingKeys) {
                     let image = await client.getAsync(key);
@@ -79,7 +79,7 @@ const resolvers = {
             //TODO: rewrite scan to use callback
             const scan = new redisScan(client);
             let userPostedImages = [];
-            scan.scan('*', (err, matchingKeys) => {
+            scan.scan('*', async function(err, matchingKeys) {
                 if (err) throw(err);
                 for(let key of matchingKeys) {
                     let image = await client.getAsync(key);
