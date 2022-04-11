@@ -1,7 +1,7 @@
 import {gql} from '@apollo/client';
 
 const GET_UNSPLASH_IMAGES = gql`
-    query getUnsplashImages($pageNum: Int!) {
+    query Query($pageNum: Int) {
         unsplashImages(pageNum: $pageNum) {
             id
             url
@@ -14,8 +14,8 @@ const GET_UNSPLASH_IMAGES = gql`
 `;
 
 const GET_BINNED_IMAGES = gql`
-    query {
-        GetBinnedImages {
+    query Query {
+        binnedImages {
             id
             url
             posterName
@@ -27,8 +27,8 @@ const GET_BINNED_IMAGES = gql`
 `;
 
 const GET_USER_POSTED_IMAGES = gql`
-    query {
-        GetUserPostedImages {
+    query Query {
+        userPostedImages {
             id
             url
             posterName
@@ -40,12 +40,12 @@ const GET_USER_POSTED_IMAGES = gql`
 `;
 
 const ADD_IMAGE = gql`
-    mutation($url: String!, $posterName: String!, $description: String!, $userPosted: Boolean!, $binned: Boolean!) {
-        AddImage(url: $url, posterName: $posterName, description: $description, userPosted: $userPosted, binned: $binned) {
+    mutation Mutation($url: String!, $description: String, $posterName: String) {
+        uploadImage(url: $url, description: $description, posterName: $posterName) {
             id
             url
-            posterName
             description
+            posterName
             userPosted
             binned
         }
@@ -53,8 +53,8 @@ const ADD_IMAGE = gql`
 `;
 
 const UPDATE_IMAGE = gql`
-    mutation($id: ID!, $url: String, $posterName: String, $description: String, $userPosted: Boolean, $binned: Boolean) {
-        UpdateImage(id: $id, url: $url, posterName: $posterName, description: $description, userPosted: $userPosted, binned: $binned) {
+    mutation Mutation($updateImageId: ID!, $url: String, $posterName: String, $description: String, $userPosted: Boolean, $binned: Boolean) {
+        updateImage(id: $updateImageId, url: $url, posterName: $posterName, description: $description, userPosted: $userPosted, binned: $binned) {
             id
             url
             posterName
@@ -66,8 +66,8 @@ const UPDATE_IMAGE = gql`
 `;
 
 const DELETE_IMAGE = gql`
-    mutation($id: ID!) {
-        DeleteImage(id: $id) {
+    mutation Mutation($deleteImageId: ID!) {
+        deleteImage(id: $deleteImageId) {
             id
             url
             posterName
