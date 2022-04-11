@@ -76,7 +76,7 @@ const resolvers = {
             let res = await Axios.get(`https://api.unsplash.com/photos?page=${args.pageNum}&client_id=${UNSPLASH_ACCESS_KEY}`);
             const images = res.data.map(async (image) => {
                 // console.log(image);
-                let test = await client.getAsync(image.id, JSON.stringify(image));
+                let test = await client.getAsync(image.id);
                 if(test) {
                     return JSON.parse(test);
                 } else {
