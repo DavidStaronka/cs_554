@@ -5,13 +5,15 @@ const My_bin = (props) => {
     const [ images, setImages ] = useState([]);
     // const [ loading, setLoading ] = useState(true);
     // const [ error, setError ] = useState(false);
-    const classes = useStyles();
+    // const classes = useStyles();
 
-    let card = null;
+    // let card = null;
 
     useEffect(() => {
         // async calls to apollo backend
-    }, []);
+        let res = useQuery(GET_BIN_IMAGES);
+        setImages(res);
+    }, [images]);
 
     return (
         <div>
