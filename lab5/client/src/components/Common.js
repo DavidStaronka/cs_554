@@ -48,7 +48,8 @@ const Common = (props) => {
                                 />
                                 <div>
                                     <Button size='small' onClick={() => 
-                                        binHandler({ variables: { id: picture.id, 
+                                        binHandler({ variables: { 
+                                            id: picture.id, 
                                             url:picture.url, 
                                             posterName: picture.posterName, 
                                             description: picture.description, 
@@ -83,7 +84,10 @@ const Common = (props) => {
                                 />
                                 <div>
                                     <Button size='small' onClick={() => 
-                                        binHandler({ variables: { id: picture.id, binned: false } })
+                                        binHandler({ variables: { 
+                                            id: picture.id, 
+                                            binned: false 
+                                        } })
                                     }>remove from bin</Button>
                                 </div>
                             </div>

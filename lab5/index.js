@@ -146,7 +146,8 @@ const resolvers = {
                 binned: args.binned !== undefined ? args.binned : testImg.binned
             };
             if(testImg) {
-                if(testImg.binned && !args.binned && !args.userPosted) {
+                if(testImg.binned && !args.binned && !image.userPosted) {
+                    console.log(args);
                     //Currently just returning the deleted image, not sure what else to do here
                     await client.delAsync(args.id);
                     return testImg;
