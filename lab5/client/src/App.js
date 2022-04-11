@@ -1,9 +1,10 @@
 import React from 'react';
-// import './App.css';
+import './App.css';
 import {NavLink, BrowserRouter as Router, Route} from 'react-router-dom';
 import Unsplash_imgs from './components/Unsplash_imgs';
 import My_bin from './components/My_bin';
 import My_posts from './components/My_posts';
+import New_post from './components/New_post';
 import {
   ApolloClient,
   HttpLink,
@@ -28,21 +29,25 @@ function App() {
                     </h1>
                     <nav>
                         <NavLink className='navlink' to='/my-bin'>
-                            my bin | 
+                            my bin
                         </NavLink>
                         <NavLink className='navlink' to='/'>
-                            images | 
+                            images
                         </NavLink>
-
                         <NavLink className='navlink' to='/my-posts'>
                             my posts
                         </NavLink>
+                        <NavLink className='navlink' to='/new-post'>
+                            new post
+                        </NavLink>
                     </nav>
                 </header>
-                <Route exact path='/' component={Unsplash_imgs} />
-                <Route path='/my-bin' component={My_bin} />
-                <Route path='/my-posts' component={My_posts} />
-                {/* <Route path='/new-post' component={New_post} /> */}
+                <div>
+                    <Route exact path='/' component={Unsplash_imgs} />
+                    <Route path='/my-bin' component={My_bin} />
+                    <Route path='/my-posts' component={My_posts} />
+                    <Route path='/new-post' component={New_post} />
+                </div>
             </div>
         </Router>
     </ApolloProvider>

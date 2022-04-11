@@ -35,7 +35,6 @@ const Unsplash_imgs = (props) => {
         <div>
             <Common images={data.unsplashImages} />
             <button onClick={() => {
-                // TODO: have get more call backend
                 setPageNum(pageNum + 1);
             }}>Get more</button>
         </div>

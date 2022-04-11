@@ -5,18 +5,7 @@ import queries from '../queries';
 
 const My_posts = (props) => {
     const {loading, error, data} = useQuery(queries.GET_USER_POSTED_IMAGES);
-    // const [ loading, setLoading ] = useState(true);
-    // const [ error, setError ] = useState(false);
-    // const classes = useStyles();
-
-    // let card = null;
-
-    // useEffect(() => {
-    //     // async calls to apollo backend
-    //     let res = useQuery(GET_USER_POSTED_IMAGES);
-    //     setImages(res);
-    // }, [images]);
-
+    
     if(loading){
         return <p>Loading...</p>;
     }

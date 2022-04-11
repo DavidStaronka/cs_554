@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography, makeStyles, Button, Divider } from '@material-ui/core';
+import { Card, CardContent, CardMedia, Grid, Typography, makeStyles, Button } from '@material-ui/core';
 import { useMutation } from '@apollo/client';
 import queries from '../queries';
 // import { Link } from 'react-router-dom';
@@ -21,6 +21,13 @@ const Common = (props) => {
 
     const [binHandler, {binData, binLoading, binError}] = useMutation(queries.UPDATE_IMAGE);
     const [deleteHandler, {delData, delLoading, delError}] = useMutation(queries.DELETE_IMAGE);
+
+    if(binError){
+        console.log(binError);
+    }
+    if(delError){
+        console.log(delError);
+    }
 
     // TODO: have add to bin/remove from bin call backend
     const buildCard = (picture) => {
@@ -49,7 +56,7 @@ const Common = (props) => {
                                 <div>
                                     <Button size='small' onClick={() => 
                                         binHandler({ variables: { 
-                                            id: picture.id, 
+                                            updateImageId: picture.id, 
                                             url:picture.url, 
                                             posterName: picture.posterName, 
                                             description: picture.description, 
@@ -85,7 +92,11 @@ const Common = (props) => {
                                 <div>
                                     <Button size='small' onClick={() => 
                                         binHandler({ variables: { 
-                                            id: picture.id, 
+                                            updateImageId: picture.id, 
+                                            url:picture.url, 
+                                            posterName: picture.posterName, 
+                                            description: picture.description, 
+                                            userPosted: picture.userPosted, 
                                             binned: false 
                                         } })
                                     }>remove from bin</Button>
@@ -119,7 +130,7 @@ const Common = (props) => {
                                 <div>
                                     <Button size='small' onClick={() => 
                                         binHandler({ variables: { 
-                                            id: picture.id, 
+                                            updateImageId: picture.id, 
                                             url:picture.url, 
                                             posterName: picture.posterName, 
                                             description: picture.description, 
@@ -128,7 +139,7 @@ const Common = (props) => {
                                         } })
                                     }>add to bin</Button>
                                     <Button size='small' onClick={() => 
-                                        deleteHandler({ variables: { id: picture.id} })
+                                        deleteHandler({ variables: { deleteImageId: picture.id} })
                                     }>delete</Button>
                                 </div>
                             </div>
@@ -158,12 +169,12 @@ const Common = (props) => {
                                 <div>
                                     <Button size='small' onClick={() => 
                                         binHandler({ variables: { 
-                                            id: picture.id, 
+                                            updateImageId: picture.id, 
                                             binned: false 
                                         } })
                                     }>remove from bin</Button>
                                     <Button size='small' onClick={() => 
-                                        deleteHandler({ variables: { id: picture.id} })
+                                        deleteHandler({ variables: { deleteImageId: picture.id} })
                                     }>delete</Button>
                                 </div>
                             </div>
