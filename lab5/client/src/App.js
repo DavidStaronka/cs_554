@@ -27,21 +27,22 @@ function App() {
                         Binterest
                     </h1>
                     <nav>
-                    <NavLink className='navlink' to='/my-bin'>
-                        my bin
-                    </NavLink>
-                    <NavLink className='navlink' to='/'>
-                        images
-                    </NavLink>
+                        <NavLink className='navlink' to='/my-bin'>
+                            my bin | 
+                        </NavLink>
+                        <NavLink className='navlink' to='/'>
+                            images | 
+                        </NavLink>
 
-                    <NavLink className='navlink' to='/my-posts'>
-                        my posts
-                    </NavLink>
+                        <NavLink className='navlink' to='/my-posts'>
+                            my posts
+                        </NavLink>
                     </nav>
                 </header>
                 <Route exact path='/' component={Unsplash_imgs} />
                 <Route path='/my-bin' component={My_bin} />
                 <Route path='/my-posts' component={My_posts} />
+                {/* <Route path='/new-post' component={New_post} /> */}
             </div>
         </Router>
     </ApolloProvider>

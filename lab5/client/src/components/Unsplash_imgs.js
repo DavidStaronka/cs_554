@@ -27,6 +27,10 @@ const Unsplash_imgs = (props) => {
         return <p>Loading...</p>;
     }
 
+    if(error){
+        console.log(error);
+    }
+
     return (
         <div>
             <Common images={data.unsplashImages} />
