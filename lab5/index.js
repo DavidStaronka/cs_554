@@ -1,6 +1,5 @@
 const {ApolloServer, gql} = require('apollo-server');
 const Axios = require('axios');
-const redisScan = require('node-redis-scan');
 const uuid = require('uuid');
 const bluebird = require('bluebird');
 const redis = require('redis');
@@ -77,13 +76,18 @@ const resolvers = {
             let res = await Axios.get(`https://api.unsplash.com/photos?page=${args.pageNum}&client_id=${UNSPLASH_ACCESS_KEY}`);
             const images = res.data.map(image => {
                 // console.log(image);
-                return {
-                    id: image.id,
-                    url: image.urls.regular,
-                    posterName: image.user.name,
-                    description: image.description,
-                    userPosted: false,
-                    binned: false
+                let test = await client.getAsync(image.id, JSON.stringify(image));
+                if(test) {
+                    return JSON.parse(test);
+                } else {
+                    return {
+                        id: image.id,
+                        url: image.urls.regular,
+                        posterName: image.user.name,
+                        description: image.description,
+                        userPosted: false,
+                        binned: false
+                    }
                 }
             });
             return images;
@@ -95,7 +99,10 @@ const resolvers = {
             for(let key of binnedKeys) {
                 let image = await client.getAsync(key);
                 let parsedImage = JSON.parse(image);
-                binnedImages.push(parsedImage);
+                console.log(parsedImage);
+                if(parsedImage.binned) {
+                    binnedImages.push(parsedImage);
+                }
             }
             return binnedImages;
         },
@@ -106,7 +113,9 @@ const resolvers = {
             for(let key of userPostedKeys) {
                 let image = await client.getAsync(key);
                 let parsedImage = JSON.parse(image);
-                userPostedImages.push(parsedImage);
+                if(parsedImage.userPosted) {
+                    userPostedImages.push(parsedImage);
+                }
             }
             return userPostedImages;
         }
@@ -129,12 +138,12 @@ const resolvers = {
             let testImg = await client.getAsync(args.id);
             testImg = JSON.parse(testImg);
             const image = {
-                id: args.id ? args.id : testImg.id,
-                url: args.url ? args.url : testImg.url,
-                posterName: args.posterName ? args.posterName : testImg.posterName,
-                description: args.description ? args.description : testImg.description,
-                userPosted: args.userPosted ? args.userPosted : testImg.userPosted,
-                binned: args.binned ? args.binned : testImg.binned
+                id: args.id !== undefined ? args.id : testImg.id,
+                url: args.url !== undefined ? args.url : testImg.url,
+                posterName: args.posterName !== undefined ? args.posterName : testImg.posterName,
+                description: args.description !== undefined ? args.description : testImg.description,
+                userPosted: args.userPosted !== undefined ? args.userPosted : testImg.userPosted, 
+                binned: args.binned !== undefined ? args.binned : testImg.binned
             };
             if(testImg) {
                 if(testImg.binned && !args.binned && !args.userPosted) {
