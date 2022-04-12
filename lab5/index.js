@@ -150,7 +150,7 @@ const resolvers = {
                     console.log(args);
                     //Currently just returning the deleted image, not sure what else to do here
                     await client.delAsync(args.id);
-                    return testImg;
+                    return image;
                 } else if(args.binned && !testImg.binned) {
                     await client.setAsync(args.id, JSON.stringify(image));
                     return image;
