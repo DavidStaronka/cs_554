@@ -8,19 +8,21 @@ const useStyles = makeStyles({});
 
 const Common = (props) => {
     const [ images, setImages ] = useState([]);
+    const [ changeInBack, setChangeInBack ] = useState(false);
     // const [ loading, setLoading ] = useState(true);
     // const [ error, setError ] = useState(false);
 	const classes = useStyles();
 
     let card = null;
 
+    const [binHandler, {binData, binLoading, binError}] = useMutation(queries.UPDATE_IMAGE);
+    const [deleteHandler, {delData, delLoading, delError}] = useMutation(queries.DELETE_IMAGE);
+   
     useEffect(() => {
         // need a wrapper component to fetch data from backend
         setImages(props.images);
     }, [props.images]);
 
-    const [binHandler, {binData, binLoading, binError}] = useMutation(queries.UPDATE_IMAGE);
-    const [deleteHandler, {delData, delLoading, delError}] = useMutation(queries.DELETE_IMAGE);
 
     if(binError){
         console.log(binError);
@@ -28,6 +30,8 @@ const Common = (props) => {
     if(delError){
         console.log(delError);
     }
+
+    
 
     // TODO: have add to bin/remove from bin call backend
     const buildCard = (picture) => {
@@ -54,7 +58,7 @@ const Common = (props) => {
                                     title='image'
                                 />
                                 <div>
-                                    <Button size='small' onClick={() => 
+                                    <Button size='small' onClick={() => {
                                         binHandler({ variables: { 
                                             updateImageId: picture.id, 
                                             url:picture.url, 
@@ -63,6 +67,8 @@ const Common = (props) => {
                                             userPosted: picture.userPosted, 
                                             binned: true 
                                         } })
+                                        setChangeInBack(true);
+                                    }
                                     }>add to bin</Button>
                                 </div>
                             </div>
@@ -90,7 +96,7 @@ const Common = (props) => {
                                     title='image'
                                 />
                                 <div>
-                                    <Button size='small' onClick={() => 
+                                    <Button size='small' onClick={() => {
                                         binHandler({ variables: { 
                                             updateImageId: picture.id, 
                                             url:picture.url, 
@@ -99,6 +105,8 @@ const Common = (props) => {
                                             userPosted: picture.userPosted, 
                                             binned: false 
                                         } })
+                                        setChangeInBack(true);
+                                    }
                                     }>remove from bin</Button>
                                 </div>
                             </div>
@@ -128,7 +136,7 @@ const Common = (props) => {
                                     title='image'
                                 />
                                 <div>
-                                    <Button size='small' onClick={() => 
+                                    <Button size='small' onClick={() => {
                                         binHandler({ variables: { 
                                             updateImageId: picture.id, 
                                             url:picture.url, 
@@ -137,9 +145,11 @@ const Common = (props) => {
                                             userPosted: picture.userPosted, 
                                             binned: true 
                                         } })
+                                        setChangeInBack(true);}
                                     }>add to bin</Button>
-                                    <Button size='small' onClick={() => 
+                                    <Button size='small' onClick={() => {
                                         deleteHandler({ variables: { deleteImageId: picture.id} })
+                                        setChangeInBack(true); }
                                     }>delete</Button>
                                 </div>
                             </div>
@@ -167,14 +177,16 @@ const Common = (props) => {
                                     title='image'
                                 />
                                 <div>
-                                    <Button size='small' onClick={() => 
+                                    <Button size='small' onClick={() => {
                                         binHandler({ variables: { 
                                             updateImageId: picture.id, 
                                             binned: false 
                                         } })
+                                        setChangeInBack(true); }
                                     }>remove from bin</Button>
-                                    <Button size='small' onClick={() => 
+                                    <Button size='small' onClick={() => {
                                         deleteHandler({ variables: { deleteImageId: picture.id} })
+                                        setChangeInBack(true); }
                                     }>delete</Button>
                                 </div>
                             </div>
@@ -191,6 +203,23 @@ const Common = (props) => {
         images.map((image) => {
             return buildCard(image);
         });
+
+    if(binLoading){
+        return <p>Adding to Bin</p>;
+    }
+    if(delLoading){
+        return <p>Removing from Bin</p>;
+    }
+
+    if(changeInBack){
+        setChangeInBack(false);
+        if(binLoading){
+            return <p>Adding to Bin</p>;
+        }
+        if(delLoading){
+            return <p>Removing from Bin</p>;
+        }
+    }
 
     return (
         <Grid container className={classes.grid} spacing={5}>

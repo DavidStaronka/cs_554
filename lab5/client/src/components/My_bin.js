@@ -26,9 +26,6 @@ const My_bin = (props) => {
     return (
         <div>
             <Common images={data.binnedImages} />
-            <button onClick={() => {
-                // TODO: have Get More call backend
-            }}>Get More</button>
         </div>
     );
 }

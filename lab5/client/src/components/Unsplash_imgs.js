@@ -4,9 +4,9 @@ import { useQuery } from '@apollo/client';
 import queries from '../queries';
 
 const Unsplash_imgs = (props) => {
-    const [ pageNum, setPageNum ] = useState(0);
+    const [ pageNum, setPageNum ] = useState(1);
 
-    const {loading, error, data} = useQuery(queries.GET_UNSPLASH_IMAGES, {
+    const {loading, error, data, refetch} = useQuery(queries.GET_UNSPLASH_IMAGES, {
         variables: {pageNum: pageNum}
     });
     // const [ loading, setLoading ] = useState(true);
@@ -18,10 +18,10 @@ const Unsplash_imgs = (props) => {
     // console.log(error);
     // console.log(data);
 
-    // useEffect(() => {
-    //     // async calls to apollo backend
-        
-    // }, [images]);
+    useEffect(() => {
+        // async calls to apollo backend
+        refetch();
+    }, []);
 
     if(loading){
         return <p>Loading...</p>;
