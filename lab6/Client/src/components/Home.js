@@ -1,7 +1,16 @@
 import React from 'react';
 import '../App.css';
+import { useHistory } from "react-router-dom";
+
 
 const Home = () => {
+    const history = useHistory();
+
+    function gotoList(e) {
+        e.preventDefault();
+        history.push("/pokemon/page/0");
+    }
+    
 	return (
 		<div>
 			<p>

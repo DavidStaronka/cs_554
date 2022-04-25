@@ -1,4 +1,4 @@
-let nextId = 0;
+let nextId = 1;
 
 const addPokemonToTeam = (pokemon, teamId) => ({
     type: 'ADD_POKEMON',

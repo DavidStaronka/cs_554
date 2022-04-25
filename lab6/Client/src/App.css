@@ -63,7 +63,7 @@ nav {
 	right: 40%;
 }
 
-.navlink {
+a {
 	padding: 0.4rem 0.8rem;
 	background-color: white;
 	border-radius: 3px;

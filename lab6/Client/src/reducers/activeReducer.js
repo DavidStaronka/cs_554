@@ -3,10 +3,11 @@ const initialState = {
 };
 
 function activeReducer(state = initialState, action) {
+    console.log(action.payload);
     switch (action.type) {
         case 'SET_ACTIVE':
             return {
-                activeTeam: action.payload.active
+                active: action.payload.active
             };
         default:
             return state;
